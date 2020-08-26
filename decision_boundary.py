@@ -2,18 +2,43 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.linear_model import SGDClassifier
+import sklearn.preprocessing
 
 from hebbnet import HebbNetSimple
 
 
 def generate_blobs(show=False):
     X, y = datasets.make_blobs(centers=2)
-    print(
-        f"Generated blobs with {X.shape[0]} samples : {X.shape[1]} features : {len(np.unique(y))} labels"
-    )
-    if show:
-        plot_data(X, y, show=True)
+
+    return normalize_data(X), y
+
+
+def generate_moons(show=False):
+    X, y = datasets.make_moons(200, noise=0.0)
+
+    return normalize_data(X), y
+
+
+def generate_circles():
+    X, y = datasets.make_circles(n_samples=500, noise=0.2)
+
+    return normalize_data(X), y
+
+
+def generate_xor(signed=True):
+    X = np.array([[1, 1], [1, 0], [0, 1], [0, 0]])
+    y = np.array([1, 0, 0, 1])
+
+    if signed:
+        X = 2 * X - 1
+        y = 2 * y - 1
+
     return X, y
+
+
+def normalize_data(X):
+    # return sklearn.preprocessing.StandardScaler().fit_transform(X)
+    return X
 
 
 def plot_data(X, y, show=True):
